@@ -64,8 +64,7 @@ func simpleInfoDBData(sLabel: UILabel) {
     let config = NSURLSessionConfiguration.defaultSessionConfiguration()
     let session = NSURLSession(configuration: config)
     
-    let task = session.dataTaskWithRequest(request, completionHandler: {
-        (data, response, error) -> Void in
+    let task = session.dataTaskWithRequest(request) { data, response, error in
         
         if data != nil {
             let result = NSString(data: data!, encoding: NSUTF8StringEncoding)!
@@ -74,7 +73,7 @@ func simpleInfoDBData(sLabel: UILabel) {
         else {
             sLabel.text = "no request"
         }
-    })
+    }
     
     task.resume()
 }
