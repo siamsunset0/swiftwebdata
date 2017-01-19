@@ -34,7 +34,8 @@ class ViewController: UIViewController {
 
 func simpleInfoDBData(sLabel: UILabel) {
     
-    /* GET
+    /*
+    // GET
     let mainUrl = "http://127.0.0.1:8000/"
     let subUrl = "si_list/"
     let url = NSURL(string: mainUrl + subUrl)!
@@ -43,12 +44,14 @@ func simpleInfoDBData(sLabel: UILabel) {
     let task = session.dataTaskWithURL(url, completionHandler: {
         (data, response, error) -> Void in
         
-        if data != nil {
-            let result = NSString(data: data!, encoding: NSUTF8StringEncoding)!
-            sLabel.text = result as String
-        }
-        else {
-            sLabel.text = "no request"
+        dispatch_async(dispatch_get_main_queue()) {
+            if data != nil {
+                let result = NSString(data: data!, encoding: NSUTF8StringEncoding)!
+                sLabel.text = result as String
+            }
+            else {
+                sLabel.text = "no request"
+            }
         }
     })
     
@@ -66,12 +69,14 @@ func simpleInfoDBData(sLabel: UILabel) {
     
     let task = session.dataTaskWithRequest(request) { data, response, error in
         
-        if data != nil {
-            let result = NSString(data: data!, encoding: NSUTF8StringEncoding)!
-            sLabel.text = result as String
-        }
-        else {
-            sLabel.text = "no request"
+        dispatch_async(dispatch_get_main_queue()) {
+            if data != nil {
+                let result = NSString(data: data!, encoding: NSUTF8StringEncoding)!
+                sLabel.text = result as String
+            }
+            else {
+                sLabel.text = "no request"
+            }
         }
     }
     
