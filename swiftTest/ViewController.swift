@@ -19,11 +19,11 @@ class ViewController: UIViewController {
     
     @IBAction func pushBTText(sender: AnyObject) {
         if (swiftLabel.text == "swiftTest") {
-            swiftLabel.text = "change"
+            //swiftLabel.text = "change"
             
             // db data print to label(request web server)
-            let sidata = simpleInfoDBData()
-            swiftLabel.text = sidata.description
+            simpleInfoDBData(swiftLabel)
+            //swiftLabel.text = sidata.description
         }
         else {
             swiftLabel.text = "swiftTest"
@@ -32,51 +32,50 @@ class ViewController: UIViewController {
 
 }
 
-func simpleInfoDBData() -> NSString {
+func simpleInfoDBData(sLabel: UILabel) {
     
+    /* GET
     let mainUrl = "http://127.0.0.1:8000/"
     let subUrl = "si_list/"
-    let urlString = mainUrl + subUrl
-    //let params = ""
-    var result: NSString? = nil
+    let url = NSURL(string: mainUrl + subUrl)!
+    let session = NSURLSession.sharedSession()
     
-    let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
-    let session = NSURLSession(configuration: sessionConfig)
-    let url = NSURL(string: urlString)!
-    let request = NSMutableURLRequest(URL: url)
-    request.HTTPMethod = "POST"
-    /*
-    do
-    {
-        request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(params, options: NSJSONWritingOptions.PrettyPrinted)
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue("application/json", forHTTPHeaderField: "Accept")
-    }
-    catch
-    {
-        return ("Error")
-    }
-    */
-    NSURLSession.sharedSession().dataTaskWithRequest(request) { data, response, error in
+    let task = session.dataTaskWithURL(url, completionHandler: {
+        (data, response, error) -> Void in
         
         if data != nil {
-            result = NSString(data: data!, encoding: NSASCIIStringEncoding)!
+            let result = NSString(data: data!, encoding: NSUTF8StringEncoding)!
+            sLabel.text = result as String
         }
         else {
-            result = "request error"
+            sLabel.text = "no request"
         }
+    })
+    
+    task.resume()
+    */
+    
+    // POST
+    let mainUrl = "http://127.0.0.1:8000/"
+    let subUrl = "si_list/"
+    let url = NSURL(string: mainUrl + subUrl)
+    let request = NSMutableURLRequest(URL: url!)
+    request.HTTPMethod = "POST"
+    let config = NSURLSessionConfiguration.defaultSessionConfiguration()
+    let session = NSURLSession(configuration: config)
+    
+    let task = session.dataTaskWithRequest(request, completionHandler: {
+        (data, response, error) -> Void in
         
-        /*
-        if error != nil {
-            result = "request error"
-        } else {
-            result = NSString(data: data!, encoding: NSASCIIStringEncoding)!
-        }*/
-    }.resume()
+        if data != nil {
+            let result = NSString(data: data!, encoding: NSUTF8StringEncoding)!
+            sLabel.text = result as String
+        }
+        else {
+            sLabel.text = "no request"
+        }
+    })
     
-    if result == nil {
-        result = "NULL"
-    }
-    
-    return result!
+    task.resume()
 }
+
